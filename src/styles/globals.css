@@ -4645,7 +4645,9 @@ ul li {
 .project__list .pr-disabled > .project__list__link {
   opacity: 0.2;
 }
-
+.custom-cursor{
+  display: none;
+}
 @media (hover: none) {
   .project__list__link .l-sp:last-child {
     display: none;
