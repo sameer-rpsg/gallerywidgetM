@@ -119,32 +119,17 @@ const TransmissionSlider = () => {
     const dr = window.innerWidth > 1024 ? 0.85 : 0.5;
 
     const animateFunc = (element) => {
-      return gsap
-        .timeline()
-        .fromTo(
-          element,
-          { scale: 0.25 },
-          {
-            scale: 1,
-            zIndex: 100,
-            duration: 0.5,
-            yoyo: true,
-            repeat: 1,
-            ease: "power1.in",
-            immediateRender: false,
-          }
-        )
-        .fromTo(
-          element,
-          { xPercent: 210 },
-          {
-            xPercent: -210,
-            duration: 1,
-            ease: "none",
-            immediateRender: true,
-          },
-          0
-        );
+      return gsap.timeline().fromTo(
+        element,
+        { xPercent: 210 },
+        {
+          xPercent: -210,
+          duration: 1,
+          ease: "none",
+          immediateRender: true,
+        },
+        0
+      );
     };
 
     const buildSeamlessLoop = (items, spacing, animateFunc) => {
@@ -214,22 +199,49 @@ const TransmissionSlider = () => {
       );
     };
 
-    function smoothLerpRender() {
-      lerpedOffset.value = math.lerp(lerpedOffset.value, playhead.offset, 0.05);
-      seamlessLoop.time(wrapTime(lerpedOffset.value));
-      // Determine which card is centered
-      let centerIndex = Math.round(lerpedOffset.value / spacing) % cards.length;
-      // Normalize negative index
-      if (centerIndex < 0) centerIndex += cards.length;
-      cards.forEach((card, index) => {
-        if (index === centerIndex) {
-          card.classList.add("in-center");
-        } else {
-          card.classList.remove("in-center");
-        }
+let previousCenterIndex = null;
+
+function smoothLerpRender() {
+  // Smoothly interpolate playhead
+  lerpedOffset.value = math.lerp(lerpedOffset.value, playhead.offset, 0.05);
+  seamlessLoop.time(wrapTime(lerpedOffset.value));
+
+  // Get current center card index
+  const rawIndex = Math.round(lerpedOffset.value / spacing);
+  const centerIndex = ((rawIndex % cards.length) + cards.length) % cards.length;
+
+  cards.forEach((card, index) => {
+    const isCenter = index === centerIndex;
+
+    // Add/remove class for possible styling
+    card.classList.toggle("in-center", isCenter);
+
+    // Set z-index
+    gsap.set(card, {
+      zIndex: isCenter ? 100 : 1,
+    });
+
+    // Animate scale only if index changes
+    if (isCenter && index !== previousCenterIndex) {
+      gsap.to(card, {
+        scale: 1,
+        duration: 0.5,
+        ease: "power2.out",
       });
-      requestAnimationFrame(smoothLerpRender);
+      previousCenterIndex = index;
+    } else if (!isCenter) {
+      gsap.to(card, {
+        scale: 0.75,
+        duration: 0.5,
+        ease: "power2.out",
+      });
     }
+  });
+
+  requestAnimationFrame(smoothLerpRender);
+}
+
+
     requestAnimationFrame(smoothLerpRender);
 
     // 👇 Fix: Better drag handling
@@ -255,7 +267,7 @@ const TransmissionSlider = () => {
         }, 300);
       },
     });
-        const cursor = document.querySelector(".custom-cursor");
+    const cursor = document.querySelector(".custom-cursor");
     const carousel = document.querySelector(".project__carousel");
 
     let mouse = { x: 0, y: 0 };
@@ -298,7 +310,6 @@ const TransmissionSlider = () => {
       carousel.removeEventListener("mouseenter", onMouseEnter);
       carousel.removeEventListener("mouseleave", onMouseLeave);
     };
-
   }, []);
 
   return (
