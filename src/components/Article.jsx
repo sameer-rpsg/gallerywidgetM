@@ -77,10 +77,10 @@ const Article = () => {
                   data-google-query-id="CMiA9rbOyI8DFV-lZgIdzRM9Ig"
                   style={{ margin: "30px auto" }}
                 >
-                  <div
+                  {/* <div
                     id="google_ads_iframe_/23290324739/Manifest-Mobile-Top-300_0__container__"
                     style={{ border: "0pt none", width: 300, height: 0 }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="big-container-blog">
@@ -101,7 +101,7 @@ const Article = () => {
                     //     color: "transparent"
                     //   }}
                     sizes="100vw"
-                    src="https://www.manifestmagazine.in/_next/image?url=https%3A%2F%2Fcdn.manifestmagazine.in%2Feditor-images%2F2025-09-04T10%253A25%253A13.437Z-Untitled%2520design%2520-%25202025-09-04T154543.191.jpg&w=750&q=75"
+                    src="https://www.manifestmagazine.in/_next/image?url=https%3A%2F%2Fcdn.manifestmagazine.in%2Farticle%2F2025-03-07T07%253A16%253A47.764Z-Cover%2520image%2520edited%2520.jpg&w=1920&q=75"
                   />
                 </div>
                 <div className="Stories_caption_wrapper">
